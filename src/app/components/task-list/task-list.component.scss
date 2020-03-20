@@ -1,101 +1,79 @@
-$mat-menu-side-padding: 16px !default;
+
 $scrollbar-width: 5px;
-$clear-button-width: 20px;
-$multiple-check-width: 33px;
-$dropdown-width: 200px;
+$width: 200px;
 $element-height: 50px;
 
-/*
- * Custom Dropdown Features
- */
-
- #toggleSelectAll {
-  display: flex;
-  padding-left: 15px;
-  padding-top: 10px;
-  align-items: center;
-  text-align: center;
-}
-
-#wrapper {
-  display: flex;
-  align-items: center;
-  // justify-content: center;
-  height: 60px;
-}
-
-#clearBtn {
-  margin-left: 50px;
-  margin-right: 14px;
-  // since default padding is 16px so to get 30px distance add 14px margin
-}
-
-::ng-deep .app-panel-class { 
-  margin-left: 10px;
-  // max-width: 10px !important;
-  font-size: 10px;
-  margin-top: -10px;
-  height: 240px;
-}
-
-::ng-deep .app-panel-class:not([class*=mat-elevation-z]){ min-width: calc(100% - 8.9px) !important; height: 105% !important; max-height: 400px;}
-
-.task-input {
-  height: $element-height;
-  width: $dropdown-width - 12px;
+@mixin basic-input {
   padding-left: 10px;
   padding-right: 10px;
   background-color: white;   
   border : 1px solid #EAEAEA;
   background: white;
   z-index: 100;
+  height: $element-height;
 }
 
 /*
- * Custom Dropdown Panel
+ * Task List Input
  */
 
-::ng-deep mat-select {
-  background-color: white;   
-  border : 1px solid #EAEAEA;
-  height: 30px;
-  padding-top: 10px;
-  text-align-last:center;
-  padding-left: 10px;
-  width: $dropdown-width !important;
-  position:relative;
-}
-
-::ng-deep .mat-option {
-position: relative;
-width: $dropdown-width + 10px - $scrollbar-width;
-}
-
-::ng-deep .mat-option #selectAllMatOption {
-margin-top: 80px !important;
-width: $dropdown-width;
+.task-input {
+  @include basic-input();
+  width: $width - 12px;
+  min-width:380px;
 }
 
 ::ng-deep .mat-form-field-underline {
   display: none;
 }
 
-::ng-deep .mat-select-arrow {
-  border-left: 5px solid transparent !important;
-  border-right: 5px solid transparent !important;
-  border-top: 5px solid !important;
-  margin: 10px 10px !important;
+/*
+ * Custom Task List
+ */
+
+.mat-form-field {
+  width:470px;
+  display: block;
+  border: 0px;
+  margin-bottom: -20px; 
+  margin-top: -40px;
+}
+
+.mat-list-option {
+  width: 400px; 
+  height: 50px;
+}
+
+button {
+  height: 50px;
+}
+
+.actions {
+  position: absolute; 
+  right: 0; 
+  top: 0;
+}
+
+.edit-input {
+  @include basic-input();
+  width:240px; 
+  position: absolute; 
+  top: 0; 
+  left: 0;
+}
+
+.task-list {
+  background-color: white;   
+  border : 1px solid #EAEAEA;
+  background: white;
+  padding: 0;
+  margin: 0;
+  height: 500px;
 }
 
 /*
  * Custom Scrollbar
  */
-
-.custom-scroll-bar{
-  height:30vh;
-  overflow-y:scroll;
-  overflow-x: hidden;
-}
 
 .custom-scroll-bar::-webkit-scrollbar{
   width: 5px;
@@ -106,8 +84,9 @@ width: $dropdown-width;
 }
 
 .custom-scroll-bar{
-  height:30vh;
+  height:480px;
   overflow-y:scroll;
+  overflow-x: hidden;
 }
 
 .strikethrough {

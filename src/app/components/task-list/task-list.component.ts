@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs';
 })
 export class TaskListComponent implements OnInit, OnDestroy {
 
-  selectedOptions;
   showAddTask;
   showEditInputs = [];
   tasks = [];
@@ -33,6 +32,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
         this.filteredSearch = this.tasks;
     });
 
+    // filter the list when searching
     this.subscription = this.searchInput.valueChanges
       .subscribe(() => {
         this.filter();
@@ -49,7 +49,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     this.addTaskInput.setValue("");
     this.showAddTask = false;
     this.filteredSearch = this.tasks;
-    this.taskListService.addTask(); // mock add
+    this.taskListService.addTask(); // mock add backend
   }
 
   addTaskKeyDownEvent(event) {
@@ -96,27 +96,27 @@ export class TaskListComponent implements OnInit, OnDestroy {
    */
   onSelection(event: MatSelectionListChange, selectedOptions) {
     console.log(this.selectMultiSearch.value,event.source);
-      let restoreSelectedValues = false;
-      if(this.searchInput.value && this.searchInput.value.length
-        && this.previouslySelectedItems && Array.isArray(this.previouslySelectedItems)) {
-            if(!this.selectMultiSearch.value || !Array.isArray(this.selectMultiSearch.value)) {
-              this.selectMultiSearch.setValue([]);
+    let restoreSelectedValues = false;
+    if(this.searchInput.value && this.searchInput.value.length
+      && this.previouslySelectedItems && Array.isArray(this.previouslySelectedItems)) {
+          if(!this.selectMultiSearch.value || !Array.isArray(this.selectMultiSearch.value)) {
+            this.selectMultiSearch.setValue([]);
+          }
+          const optionValues = event.source.options.map(option => option.value);
+          this.previouslySelectedItems.forEach(previousValue => {
+            
+            //check if previous value should be restored
+            if(this.selectMultiSearch.value.indexOf(previousValue) === -1 && optionValues.indexOf(previousValue) === -1){
+              this.selectMultiSearch.value.push(previousValue);
+              restoreSelectedValues = true;
             }
-            const optionValues = event.source.options.map(option => option.value);
-            this.previouslySelectedItems.forEach(previousValue => {
-              
-              //check if previous value should be restored
-              if(this.selectMultiSearch.value.indexOf(previousValue) === -1 && optionValues.indexOf(previousValue) === -1){
-                this.selectMultiSearch.value.push(previousValue);
-                restoreSelectedValues = true;
-              }
-            });
-          }
+          });
+        }
 
-          if(restoreSelectedValues) {
-            event.source._value = this.selectMultiSearch.value;
-          }
+    if(restoreSelectedValues) {
+      event.source._value = this.selectMultiSearch.value;
+    }
 
-          this.previouslySelectedItems = this.selectMultiSearch.value;
+    this.previouslySelectedItems = this.selectMultiSearch.value;
   }
 }

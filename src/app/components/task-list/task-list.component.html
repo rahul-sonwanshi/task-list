@@ -1,39 +1,38 @@
 
-<mat-form-field style="width:470px; margin-bottom: -20px">
-    <input style="min-width:380px;" matInput class="mat-select-search-inner task-input" [formControl]="searchInput" type="text">
-    <span><button mat-button style="height: 50px;" (click)="showAddTask=!showAddTask"> <mat-icon >{{ showAddTask ? 'close' : 'add'}}</mat-icon> </button></span>
+<mat-form-field >
+    <input matInput class="task-input" [formControl]="searchInput" type="text">
+    <span><button mat-button (click)="showAddTask=!showAddTask"> <mat-icon >{{ showAddTask ? 'close' : 'add'}}</mat-icon> </button></span>
 </mat-form-field>
 
-<mat-form-field *ngIf="showAddTask" style="width:470px;display: block; border: 0px;margin-bottom: -20px; margin-top: -10px;">
-    <input  style="min-width:380px;" matInput class="task-input" [formControl]="addTaskInput"  type="text" (keydown)="addTaskKeyDownEvent($event)">
-    <span><button mat-button style="height: 50px;" (click)="addTask()"> <mat-icon >check</mat-icon> </button></span>
+<mat-form-field *ngIf="showAddTask">
+    <input matInput class="task-input" [formControl]="addTaskInput"  type="text" (keydown)="addTaskKeyDownEvent($event)">
+    <span><button mat-button (click)="addTask()"> <mat-icon >check</mat-icon> </button></span>
 </mat-form-field>
 
-<div style="width:400px;" >
+<div class="task-list" style="width:400px;" >
     <mat-selection-list
     #taskList
-    style="width:400px; display: inline-block;" 
     [formControl]="selectMultiSearch"
     (selectionChange)="onSelection($event, taskList.selectedOptions.selected)"
     class="custom-scroll-bar">
-        <div style="display: inline-block;position: relative; width: 272px;">
-            <mat-list-option 
-                checkboxPosition="before" 
-                *ngFor="let task of filteredSearch; index as i" 
-                style="width: 400px; height: 50px;" 
-                [value]="task"
-                (keydown)="$event.stopPropagation()">
-                <input #editTaskInput (keydown)="editTask($event, editTaskInput, i)" *ngIf="showEditInputs[i]" style="min-width:240px; position: absolute; top: 0; left: 0;" matInput class="task-input"  type="text">
-                <div style="width: 100px" [ngClass]="'strikethrough'">{{task}}</div>
-                <div style="position: absolute; right: 0; top: 0;">
-                    <span><button mat-button style="height: 50px;" (click)="deleteTask(i)"> <mat-icon >delete</mat-icon> </button></span>
-                    <span><button mat-button style="height: 50px;"> <mat-icon (click)="showEditInputs[i]=!showEditInputs[i]">{{ showEditInputs[i] ? 'close' : 'edit' }}</mat-icon> </button></span>
-                </div>
-            </mat-list-option>
-            
-        </div>
-    
+        <mat-list-option
+            #matOption 
+            checkboxPosition="before" 
+            *ngFor="let task of filteredSearch; index as i" 
+            [value]="task"
+            (keydown)="$event.stopPropagation()">
+            <input
+                #editTaskInput
+                matInput
+                *ngIf="showEditInputs[i]" 
+                type="text"
+                (keydown)="editTask($event, editTaskInput, i)"
+                class="edit-input" >
+            <div style="width: 100px" [ngClass]="matOption.selected ? 'strikethrough' : 'empty'">{{task}}</div>
+            <div class="actions">
+                <span><button mat-button (click)="deleteTask(i)"> <mat-icon >delete</mat-icon> </button></span>
+                <span><button mat-button> <mat-icon (click)="showEditInputs[i]=!showEditInputs[i]">{{ showEditInputs[i] ? 'close' : 'edit' }}</mat-icon> </button></span>
+            </div>
+        </mat-list-option>
     </mat-selection-list>
-    
-    
 </div>

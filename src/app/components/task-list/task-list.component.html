@@ -26,7 +26,7 @@
                 matInput
                 *ngIf="showEditInputs[i]" 
                 type="text"
-                (keydown)="keyPressEditTask($event, editTaskInput, i)"
+                (keydown)="editTaskKeyDownEvent($event, editTaskInput, i)"
                 class="edit-input" >
             <div style="width: 100px" [ngClass]="matOption.selected ? 'strikethrough' : 'empty'">{{task}}</div>
             <div class="actions">

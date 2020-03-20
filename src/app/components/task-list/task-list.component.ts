@@ -46,11 +46,13 @@ export class TaskListComponent implements OnInit, OnDestroy {
   }
 
   addTask() {
-    this.tasks.push(this.addTaskInput.value);
-    this.addTaskInput.setValue("");
-    this.showAddTask = false;
-    this.filteredSearch = this.tasks;
-    this.taskListService.addTask(); // mock add backend
+    if(this.addTaskInput.value!= null && this.addTaskInput.value.trim() != "") {
+      this.tasks.push(this.addTaskInput.value);
+      this.addTaskInput.setValue("");
+      this.showAddTask = false;
+      this.filteredSearch = this.tasks;
+      this.taskListService.addTask(); // mock add backend
+    } 
   }
 
   addTaskKeyDownEvent(event) {
@@ -60,7 +62,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
     }
   }
 
-  keyPressEditTask(event, editTaskInput, index) {
+  editTaskKeyDownEvent(event, editTaskInput, index) {
     this.bufferInput = editTaskInput;
     if(event.keyCode == 13) {
       this.editTask(event, editTaskInput, index);
@@ -70,7 +72,7 @@ export class TaskListComponent implements OnInit, OnDestroy {
   editTask(event, editTaskInput, index) {
     //optimistic update
     this.showEditInputs[index]=!this.showEditInputs[index]; 
-    if(this.bufferInput != undefined) {
+    if(this.bufferInput != undefined && this.bufferInput.value.trim()!="") {
       console.log(this.bufferInput.value);
       this.tasks[index] = this.bufferInput.value;
       this.showEditInputs[index] = false;

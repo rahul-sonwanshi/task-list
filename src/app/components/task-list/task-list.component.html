@@ -26,12 +26,12 @@
                 matInput
                 *ngIf="showEditInputs[i]" 
                 type="text"
-                (keydown)="editTask($event, editTaskInput, i)"
+                (keydown)="keyPressEditTask($event, editTaskInput, i)"
                 class="edit-input" >
             <div style="width: 100px" [ngClass]="matOption.selected ? 'strikethrough' : 'empty'">{{task}}</div>
             <div class="actions">
                 <span><button mat-button (click)="deleteTask(i)"> <mat-icon >delete</mat-icon> </button></span>
-                <span><button mat-button> <mat-icon (click)="showEditInputs[i]=!showEditInputs[i]">{{ showEditInputs[i] ? 'close' : 'edit' }}</mat-icon> </button></span>
+                <span><button mat-button> <mat-icon (click)="editTask($event, editTaskInput, i);">{{ showEditInputs[i] ? 'check' : 'edit' }}</mat-icon> </button></span>
             </div>
         </mat-list-option>
     </mat-selection-list>

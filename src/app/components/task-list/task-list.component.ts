@@ -1,5 +1,5 @@
 import { TaskListService } from './../../services/task-list.service';
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatInput, MatList, MatButton, MatSelectChange, MatIcon, MatSelect, MatCheckbox, MatSelectionListChange } from "@angular/material";
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -12,6 +12,7 @@ import { Subscription } from 'rxjs';
 export class TaskListComponent implements OnInit, OnDestroy {
 
   showAddTask;
+  bufferInput;
   showEditInputs = [];
   tasks = [];
   previouslySelectedItems = [];
@@ -59,13 +60,22 @@ export class TaskListComponent implements OnInit, OnDestroy {
     }
   }
 
+  keyPressEditTask(event, editTaskInput, index) {
+    this.bufferInput = editTaskInput;
+    if(event.keyCode == 13) {
+      this.editTask(event, editTaskInput, index);
+    }
+  }
+
   editTask(event, editTaskInput, index) {
     //optimistic update
-    if(event.keyCode == 13) {
-      this.tasks[index] = editTaskInput.value;
+    this.showEditInputs[index]=!this.showEditInputs[index]; 
+    if(this.bufferInput != undefined) {
+      console.log(this.bufferInput.value);
+      this.tasks[index] = this.bufferInput.value;
       this.showEditInputs[index] = false;
       this.taskListService.editTask(); // mock backend call
-      // rest of your code
+      this.bufferInput = undefined;
     }
   }
 

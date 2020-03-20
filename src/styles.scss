@@ -13,7 +13,7 @@
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://material.io/design/color/
 $task-list-primary: mat-palette($mat-indigo);
-$task-list-accent: mat-palette($mat-pink, A200, A100, A400);
+$task-list-accent: mat-palette($mat-pink, A200, A100, A400); // this accent is nice so I did not changed it.
 
 // The warn palette is optional (defaults to red).
 $task-list-warn: mat-palette($mat-red);

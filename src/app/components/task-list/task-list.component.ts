@@ -1,6 +1,6 @@
 import { TaskListService } from './../../services/task-list.service';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { MatInput, MatList, MatButton, MatSelectChange, MatIcon, MatSelect, MatCheckbox } from "@angular/material";
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { MatInput, MatList, MatButton, MatSelectChange, MatIcon, MatSelect, MatCheckbox, MatSelectionListChange } from "@angular/material";
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.scss']
 })
-export class TaskListComponent implements OnInit {
+export class TaskListComponent implements OnInit, OnDestroy {
 
   selectedOptions;
   showAddTask;
@@ -22,7 +22,9 @@ export class TaskListComponent implements OnInit {
   public searchInput: FormControl = new FormControl();
   public addTaskInput: FormControl = new FormControl();
 
-  constructor(private taskListService: TaskListService) { }
+  constructor(private taskListService: TaskListService) { 
+    
+  }
 
   ngOnInit() {
     this.taskListService.getTasks()
@@ -35,6 +37,11 @@ export class TaskListComponent implements OnInit {
       .subscribe(() => {
         this.filter();
     });
+  }
+
+  // destroy to prevent memory leaks
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   addTask() {
@@ -76,9 +83,10 @@ export class TaskListComponent implements OnInit {
     // get the search keyword
     let search = this.searchInput.value;
 
-    console.log(this.previouslySelectedItems,this.selectMultiSearch.value);
+    this.selectMultiSearch.setValue(this.previouslySelectedItems); // ---
     this.filteredSearch = 
-      this.tasks.filter(task => task.toLowerCase().indexOf(search.toLowerCase()) > -1)
+      this.tasks.filter(task => task.toLowerCase().indexOf(search.toLowerCase()) > -1);
+      
   }
 
   /*
@@ -86,16 +94,14 @@ export class TaskListComponent implements OnInit {
    * in order to avoid that we store previous value and check if they are present
    * in the current search if not we restore the values.
    */
-  selectionChange(event: MatSelectChange, selectedOptions) {
-    console.log(this.selectMultiSearch.value, selectedOptions);
-    if(event.source.multiple) {
+  onSelection(event: MatSelectionListChange, selectedOptions) {
+    console.log(this.selectMultiSearch.value,event.source);
       let restoreSelectedValues = false;
       if(this.searchInput.value && this.searchInput.value.length
-          && this.previouslySelectedItems && Array.isArray(this.previouslySelectedItems)) {
+        && this.previouslySelectedItems && Array.isArray(this.previouslySelectedItems)) {
             if(!this.selectMultiSearch.value || !Array.isArray(this.selectMultiSearch.value)) {
               this.selectMultiSearch.setValue([]);
             }
-
             const optionValues = event.source.options.map(option => option.value);
             this.previouslySelectedItems.forEach(previousValue => {
               
@@ -108,10 +114,9 @@ export class TaskListComponent implements OnInit {
           }
 
           if(restoreSelectedValues) {
-            event.source._onChange(this.selectMultiSearch.value);
+            event.source._value = this.selectMultiSearch.value;
           }
 
           this.previouslySelectedItems = this.selectMultiSearch.value;
-    }
   }
 }

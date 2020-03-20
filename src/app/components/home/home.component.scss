@@ -1,0 +1,32 @@
+
+$bg-color: rgba(0, 0, 0, 1);
+
+.header { grid-area: header; }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  // grid-template-rows: auto;
+  grid-template-rows: 1fr min-content;
+  grid-template-areas: 
+      "header header header header"
+      "none xyz main main";
+  // grid is divided into 6 regions and each region can be customizable
+  grid-gap: 10px;
+  // background-color: #2196F3;
+}
+
+.header {
+  background-color: $bg-color;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 30px;
+  color: white;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
